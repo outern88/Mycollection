@@ -83,6 +83,7 @@ public class ui extends Application {
         // Set the new scene to the stage
         primaryStage.setScene(newScene);
     }
+    //Menubar
     private MenuBar createMenuBar(Stage primaryStage) {
         MenuBar menuBar = new MenuBar();
         Menu fileMenu = new Menu("File");
