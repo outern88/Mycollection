@@ -1,4 +1,4 @@
 package Database;
 
-public class misc {
+public class Boxes {
 }

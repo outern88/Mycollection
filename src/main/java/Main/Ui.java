@@ -1,5 +1,6 @@
 package Main;
 
+//import libs
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -8,11 +9,24 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.layout.HBox;
 import org.controlsfx.control.Notifications;
+import java.io.BufferedWriter;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
+import javafx.scene.control.ListView;
+import javafx.scene.control.CheckBox;
+import java.util.List;
 
-public class ui extends Application {
+import Database.Cards;
+
+public class Ui extends Application {
 
     private BorderPane root;
+    private Scene scene_cards;
 
     @Override
     public void start(Stage primaryStage) {
@@ -31,7 +45,7 @@ public class ui extends Application {
         Button miscButton = new Button("Misc");
 
         // Add EventHandler for "kort" button
-        kortButton.setOnAction(event -> openNewScene(primaryStage));
+        kortButton.setOnAction(event -> openNewScene(primaryStage,scene_cards));
 
         // Add buttons to a VBox
         VBox menuButtonBox = new VBox();
@@ -61,7 +75,7 @@ public class ui extends Application {
 
     }
 
-    private void openNewScene(Stage primaryStage) {
+    private void openNewScene(Stage primaryStage, Scene scene_cards) {
         // Create the new scene's root layout
         VBox newSceneRoot = new VBox();
         newSceneRoot.setSpacing(10);
@@ -71,20 +85,84 @@ public class ui extends Application {
         MenuBar newSceneMenuBar = createMenuBar(primaryStage);
         newSceneRoot.getChildren().add(0, newSceneMenuBar);
 
-        Label newSceneLabel = new Label("This is the new scene.");
-        newSceneRoot.getChildren().add(newSceneLabel);
+        // Create card list view and load checked cards from the text file
+        ListView<HBox> cardListView = createCardListView();
+        loadCheckedCards(cardListView);
+        newSceneRoot.getChildren().add(cardListView);
+
+        // Create a back button to return to the main scene and save the checked card status to the text file
+        Button backButton = new Button("Back");
+        backButton.setOnAction(event -> {
+            saveCheckedCards(cardListView);
+            primaryStage.setScene(scene_cards);
+        });
+        newSceneRoot.getChildren().add(backButton);
 
         // Create the new scene and set it to the stage
         Scene newScene = new Scene(newSceneRoot, 800, 600);
-
-        // Create a back button to return to the main scene
-        Button backButton = new Button("Back");
-        backButton.setOnAction(event -> primaryStage.setScene(root.getScene()));
-        newSceneRoot.getChildren().add(backButton);
-
-        // Set the new scene to the stage
         primaryStage.setScene(newScene);
     }
+
+
+
+
+    //Makes a listview for the cards list.
+    private ListView<HBox> createCardListView() {
+        ListView<HBox> listView = new ListView<>();
+
+        // Read card list from cards.java
+        List<String> cards = Cards.getCardList();
+
+        // Add cards to the ListView with a checkbox
+        for (String card : cards) {
+            CheckBox checkBox = new CheckBox();
+            Label cardLabel = new Label(card);
+            HBox cardBox = new HBox(10, cardLabel, checkBox);
+            listView.getItems().add(cardBox);
+        }
+
+        return listView;
+    }
+
+
+    //write checkbox status to file
+    private void saveCheckedCards(ListView<HBox> listView) {
+        File checkedCardsFile = new File("checkedCards.txt");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(checkedCardsFile))) {
+            for (HBox cardBox : listView.getItems()) {
+                CheckBox checkBox = (CheckBox) cardBox.getChildren().get(1);
+                String status = checkBox.isSelected() ? "1" : "0";
+                writer.write(status);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //Loading the checkboxes to list
+    private void loadCheckedCards(ListView<HBox> listView) {
+        File checkedCardsFile = new File("checkedCards.txt");
+
+        if (checkedCardsFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(checkedCardsFile))) {
+                String line;
+                int index = 0;
+
+                while ((line = reader.readLine()) != null) {
+                    CheckBox checkBox = (CheckBox) listView.getItems().get(index).getChildren().get(1);
+                    checkBox.setSelected("1".equals(line));
+                    index++;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
     // Menuline
     private MenuBar createMenuBar(Stage primaryStage) {
@@ -107,7 +185,7 @@ public class ui extends Application {
         // "file" Actions
         exitMenuItem.setOnAction(event -> primaryStage.close());
         // "My collection" Actions
-        cardsMenuItem.setOnAction(event -> openNewScene(primaryStage));
+        cardsMenuItem.setOnAction(event -> openNewScene(primaryStage, scene_cards));
 
         fileMenu.getItems().addAll(newMenuItem, openMenuItem, saveMenuItem, exitMenuItem);
         myCollectionMenu.getItems().addAll(cardsMenuItem, etbMenuItem, collectionboxMenuItem, miscMenuItem);

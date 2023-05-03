@@ -4,8 +4,7 @@ package Database;
 import java.util.Arrays;
 import java.util.List;
 
-public class cards {
-
+public class Cards {
     //Sword & Shield - Brilliant Stars
     private static final List<String> cl_brilliant_stars = Arrays.asList(
             "001 Exeggcute",
