@@ -83,17 +83,29 @@ public class ui extends Application {
         // Set the new scene to the stage
         primaryStage.setScene(newScene);
     }
-    //Menubar
+    //Menuline
     private MenuBar createMenuBar(Stage primaryStage) {
         MenuBar menuBar = new MenuBar();
+        //Menu main btns
         Menu fileMenu = new Menu("File");
+        Menu myCollectionMenu = new Menu("My Collection");
+        //Sub btns
+        //File:
         MenuItem newMenuItem = new MenuItem("New");
         MenuItem openMenuItem = new MenuItem("Open");
         MenuItem saveMenuItem = new MenuItem("Save");
         MenuItem exitMenuItem = new MenuItem("Exit");
+        //Sub btn: "My collection"
+        MenuItem cardsMenuItem = new MenuItem("Cards");
+        MenuItem etbMenuItem = new MenuItem("ETB");
+        MenuItem collectionboxMenuItem = new MenuItem ("Collection Box");
+        MenuItem miscMenuItem = new MenuItem ("Misc");
+        //Menu line Actions
         exitMenuItem.setOnAction(event -> primaryStage.close()); // set action to close window
         fileMenu.getItems().addAll(newMenuItem, openMenuItem, saveMenuItem, exitMenuItem);
-        menuBar.getMenus().addAll(fileMenu);
+        myCollectionMenu.getItems().addAll(cardsMenuItem,etbMenuItem,collectionboxMenuItem,miscMenuItem);
+
+        menuBar.getMenus().addAll(fileMenu,myCollectionMenu);
 
         return menuBar;
     }
