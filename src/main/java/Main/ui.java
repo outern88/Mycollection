@@ -31,7 +31,7 @@ public class ui extends Application {
         Button miscButton = new Button("Misc");
 
         // Add EventHandler for "kort" button
-        kortButton.setOnAction(event -> openNewScene(primaryStage, mainScene));
+        kortButton.setOnAction(event -> openNewScene(primaryStage));
 
         // Add buttons to a VBox
         VBox menuButtonBox = new VBox();
@@ -57,9 +57,11 @@ public class ui extends Application {
         primaryStage.setTitle("My Collection");
         primaryStage.setScene(mainScene);
         primaryStage.show();
+
+
     }
 
-    private void openNewScene(Stage primaryStage, Scene mainScene) {
+    private void openNewScene(Stage primaryStage) {
         // Create the new scene's root layout
         VBox newSceneRoot = new VBox();
         newSceneRoot.setSpacing(10);
@@ -77,35 +79,39 @@ public class ui extends Application {
 
         // Create a back button to return to the main scene
         Button backButton = new Button("Back");
-        backButton.setOnAction(event -> primaryStage.setScene(mainScene));
+        backButton.setOnAction(event -> primaryStage.setScene(root.getScene()));
         newSceneRoot.getChildren().add(backButton);
 
         // Set the new scene to the stage
         primaryStage.setScene(newScene);
     }
-    //Menuline
+
+    // Menuline
     private MenuBar createMenuBar(Stage primaryStage) {
         MenuBar menuBar = new MenuBar();
-        //Menu main btns
+        // Menu main btns
         Menu fileMenu = new Menu("File");
         Menu myCollectionMenu = new Menu("My Collection");
-        //Sub btns
-        //File:
+        // Sub btns
+        // File:
         MenuItem newMenuItem = new MenuItem("New");
         MenuItem openMenuItem = new MenuItem("Open");
         MenuItem saveMenuItem = new MenuItem("Save");
         MenuItem exitMenuItem = new MenuItem("Exit");
-        //Sub btn: "My collection"
+        // Sub btn: "My collection"
         MenuItem cardsMenuItem = new MenuItem("Cards");
         MenuItem etbMenuItem = new MenuItem("ETB");
-        MenuItem collectionboxMenuItem = new MenuItem ("Collection Box");
-        MenuItem miscMenuItem = new MenuItem ("Misc");
-        //Menu line Actions
-        exitMenuItem.setOnAction(event -> primaryStage.close()); // set action to close window
-        fileMenu.getItems().addAll(newMenuItem, openMenuItem, saveMenuItem, exitMenuItem);
-        myCollectionMenu.getItems().addAll(cardsMenuItem,etbMenuItem,collectionboxMenuItem,miscMenuItem);
+        MenuItem collectionboxMenuItem = new MenuItem("Collection Box");
+        MenuItem miscMenuItem = new MenuItem("Misc");
+        // Menu line Actions
+        // "file" Actions
+        exitMenuItem.setOnAction(event -> primaryStage.close());
+        // "My collection" Actions
+        cardsMenuItem.setOnAction(event -> openNewScene(primaryStage));
 
-        menuBar.getMenus().addAll(fileMenu,myCollectionMenu);
+        fileMenu.getItems().addAll(newMenuItem, openMenuItem, saveMenuItem, exitMenuItem);
+        myCollectionMenu.getItems().addAll(cardsMenuItem, etbMenuItem, collectionboxMenuItem, miscMenuItem);
+        menuBar.getMenus().addAll(fileMenu, myCollectionMenu);
 
         return menuBar;
     }
