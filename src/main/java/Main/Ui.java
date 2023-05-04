@@ -27,11 +27,12 @@ public class Ui extends Application {
 
     private BorderPane root;
     private Scene scene_cards;
+    private Scene mainScene;
 
     @Override
     public void start(Stage primaryStage) {
         root = new BorderPane();
-        Scene mainScene = new Scene(root, 800, 600);
+        mainScene = new Scene(root, 800, 600);
 
         // Create menu bar and menu buttons for the main scene
         MenuBar menuBar = createMenuBar(primaryStage);
@@ -45,7 +46,7 @@ public class Ui extends Application {
         Button miscButton = new Button("Misc");
 
         // Add EventHandler for "kort" button
-        kortButton.setOnAction(event -> openNewScene(primaryStage,scene_cards));
+        kortButton.setOnAction(event -> openNewScene(primaryStage));
 
         // Add buttons to a VBox
         VBox menuButtonBox = new VBox();
@@ -75,10 +76,10 @@ public class Ui extends Application {
 
     }
 
-    private void openNewScene(Stage primaryStage, Scene scene_cards) {
+    private void openNewScene(Stage primaryStage) {
         // Create the new scene's root layout
         VBox newSceneRoot = new VBox();
-        newSceneRoot.setSpacing(10);
+        newSceneRoot.setSpacing(1);
         newSceneRoot.setPadding(new Insets(10));
 
         // Add the menu bar to the new scene
@@ -94,7 +95,7 @@ public class Ui extends Application {
         Button backButton = new Button("Back");
         backButton.setOnAction(event -> {
             saveCheckedCards(cardListView);
-            primaryStage.setScene(scene_cards);
+            primaryStage.setScene(mainScene);
         });
         newSceneRoot.getChildren().add(backButton);
 
@@ -185,7 +186,7 @@ public class Ui extends Application {
         // "file" Actions
         exitMenuItem.setOnAction(event -> primaryStage.close());
         // "My collection" Actions
-        cardsMenuItem.setOnAction(event -> openNewScene(primaryStage, scene_cards));
+        cardsMenuItem.setOnAction(event -> openNewScene(primaryStage));
 
         fileMenu.getItems().addAll(newMenuItem, openMenuItem, saveMenuItem, exitMenuItem);
         myCollectionMenu.getItems().addAll(cardsMenuItem, etbMenuItem, collectionboxMenuItem, miscMenuItem);
