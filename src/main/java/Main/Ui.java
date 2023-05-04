@@ -47,6 +47,11 @@ public class Ui extends Application {
 
         // Add EventHandler for "kort" button
         kortButton.setOnAction(event -> openNewScene(primaryStage));
+        etbButton.setOnAction(event -> openEtbScene(primaryStage));
+        collectionBoxButton.setOnAction(event -> openCollectionBox(primaryStage));
+        boosterPacksButton.setOnAction(event -> openBoosterPack(primaryStage));
+        miscButton.setOnAction(event -> openMisc(primaryStage));
+
 
         // Add buttons to a VBox
         VBox menuButtonBox = new VBox();
@@ -76,20 +81,19 @@ public class Ui extends Application {
 
     }
 
+    //"Cards" scene
     private void openNewScene(Stage primaryStage) {
         // Create the new scene's root layout
-        VBox newSceneRoot = new VBox();
-        newSceneRoot.setSpacing(1);
-        newSceneRoot.setPadding(new Insets(10));
+        BorderPane newSceneRoot = new BorderPane(); // Use a BorderPane instead of a VBox
 
         // Add the menu bar to the new scene
         MenuBar newSceneMenuBar = createMenuBar(primaryStage);
-        newSceneRoot.getChildren().add(0, newSceneMenuBar);
+        newSceneRoot.setTop(newSceneMenuBar); // Set the menu bar to the top of the BorderPane
 
         // Create card list view and load checked cards from the text file
         ListView<HBox> cardListView = createCardListView();
         loadCheckedCards(cardListView);
-        newSceneRoot.getChildren().add(cardListView);
+        newSceneRoot.setCenter(cardListView); // Add the cardListView to the center of the BorderPane
 
         // Create a back button to return to the main scene and save the checked card status to the text file
         Button backButton = new Button("Back");
@@ -97,11 +101,100 @@ public class Ui extends Application {
             saveCheckedCards(cardListView);
             primaryStage.setScene(mainScene);
         });
-        newSceneRoot.getChildren().add(backButton);
+        newSceneRoot.setBottom(backButton); // Add the backButton to the bottom of the BorderPane
 
         // Create the new scene and set it to the stage
-        Scene newScene = new Scene(newSceneRoot, 800, 600);
-        primaryStage.setScene(newScene);
+        Scene scene_cards = new Scene(newSceneRoot, 800, 600);
+        primaryStage.setScene(scene_cards);
+    }
+
+
+    //"Etb" scene
+    private void openEtbScene(Stage primaryStage) {
+        // Create the new scene's root layout
+        BorderPane newSceneRoot = new BorderPane(); // Use a BorderPane instead of a VBox
+
+        // Add the menu bar to the new scene
+        MenuBar newSceneMenuBar = createMenuBar(primaryStage);
+        newSceneRoot.setTop(newSceneMenuBar); // Set the menu bar to the top of the BorderPane
+
+
+        // Create a back button to return to the main scene and save the checked card status to the text file
+        Button backButton = new Button("Back");
+        backButton.setOnAction(event -> {
+            primaryStage.setScene(mainScene);
+        });
+        newSceneRoot.setBottom(backButton); // Add the backButton to the bottom of the BorderPane
+
+        // Create the new scene and set it to the stage
+        Scene scene_etb = new Scene(newSceneRoot, 800, 600);
+        primaryStage.setScene(scene_etb);
+    }
+
+    //"Collection box" scene
+    private void openCollectionBox(Stage primaryStage) {
+        // Create the new scene's root layout
+        BorderPane newSceneRoot = new BorderPane(); // Use a BorderPane instead of a VBox
+
+        // Add the menu bar to the new scene
+        MenuBar newSceneMenuBar = createMenuBar(primaryStage);
+        newSceneRoot.setTop(newSceneMenuBar); // Set the menu bar to the top of the BorderPane
+
+
+        // Create a back button to return to the main scene and save the checked card status to the text file
+        Button backButton = new Button("Back");
+        backButton.setOnAction(event -> {
+            primaryStage.setScene(mainScene);
+        });
+        newSceneRoot.setBottom(backButton); // Add the backButton to the bottom of the BorderPane
+
+        // Create the new scene and set it to the stage
+        Scene scene_collection_box = new Scene(newSceneRoot, 800, 600);
+        primaryStage.setScene(scene_collection_box);
+    }
+
+
+    //"Collection box" scene
+    private void openBoosterPack(Stage primaryStage) {
+        // Create the new scene's root layout
+        BorderPane newSceneRoot = new BorderPane(); // Use a BorderPane instead of a VBox
+
+        // Add the menu bar to the new scene
+        MenuBar newSceneMenuBar = createMenuBar(primaryStage);
+        newSceneRoot.setTop(newSceneMenuBar); // Set the menu bar to the top of the BorderPane
+
+        // Create a back button to return to the main scene and save the checked card status to the text file
+        Button backButton = new Button("Back");
+        backButton.setOnAction(event -> {
+            primaryStage.setScene(mainScene);
+        });
+        newSceneRoot.setBottom(backButton); // Add the backButton to the bottom of the BorderPane
+
+        // Create the new scene and set it to the stage
+        Scene scene_booster_pack = new Scene(newSceneRoot, 800, 600);
+        primaryStage.setScene(scene_booster_pack);
+    }
+
+
+    //"Misc" scene
+    private void openMisc(Stage primaryStage) {
+        // Create the new scene's root layout
+        BorderPane newSceneRoot = new BorderPane(); // Use a BorderPane instead of a VBox
+
+        // Add the menu bar to the new scene
+        MenuBar newSceneMenuBar = createMenuBar(primaryStage);
+        newSceneRoot.setTop(newSceneMenuBar); // Set the menu bar to the top of the BorderPane
+
+        // Create a back button to return to the main scene and save the checked card status to the text file
+        Button backButton = new Button("Back");
+        backButton.setOnAction(event -> {
+            primaryStage.setScene(mainScene);
+        });
+        newSceneRoot.setBottom(backButton); // Add the backButton to the bottom of the BorderPane
+
+        // Create the new scene and set it to the stage
+        Scene scene_misc = new Scene(newSceneRoot, 800, 600);
+        primaryStage.setScene(scene_misc);
     }
 
 
@@ -125,7 +218,6 @@ public class Ui extends Application {
         return listView;
     }
 
-
     //write checkbox status to file
     private void saveCheckedCards(ListView<HBox> listView) {
         File checkedCardsFile = new File("checkedCards.txt");
@@ -141,7 +233,6 @@ public class Ui extends Application {
             e.printStackTrace();
         }
     }
-
 
     //Loading the checkboxes to list
     private void loadCheckedCards(ListView<HBox> listView) {
@@ -162,9 +253,6 @@ public class Ui extends Application {
             }
         }
     }
-
-
-
     // Menuline
     private MenuBar createMenuBar(Stage primaryStage) {
         MenuBar menuBar = new MenuBar();
